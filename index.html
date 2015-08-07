@@ -156,8 +156,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/08/07/Replacing OpenVPN with tinc on Tomato OpenWRT dd-wrt for bypassing GFW - 使用tinc替代OpenVPN作为路由器自动翻墙方案/" itemprop="url">
-                未命名
+              <a class="post-title-link" href="/2015/08/07/Replacing-OpenVPN-with-tinc-on-Tomato-OpenWRT-dd-wrt-for-bypassing-GFW-使用tinc替代OpenVPN作为路由器自动翻墙方案/" itemprop="url">
+                Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案
               </a>
             
           
@@ -167,7 +167,7 @@
       <div class="post-meta">
         <span class="post-time">
           發表於
-          <time itemprop="dateCreated" datetime="2015-08-07T08:31:40+08:00" content="2015-08-07">
+          <time itemprop="dateCreated" datetime="2015-08-07T08:35:07+08:00" content="2015-08-07">
             2015-08-07
           </time>
         </span>
@@ -178,8 +178,8 @@
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/08/07/Replacing OpenVPN with tinc on Tomato OpenWRT dd-wrt for bypassing GFW - 使用tinc替代OpenVPN作为路由器自动翻墙方案/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/07/Replacing OpenVPN with tinc on Tomato OpenWRT dd-wrt for bypassing GFW - 使用tinc替代OpenVPN作为路由器自动翻墙方案/" itemprop="commentsCount"></span>
+              <a href="/2015/08/07/Replacing-OpenVPN-with-tinc-on-Tomato-OpenWRT-dd-wrt-for-bypassing-GFW-使用tinc替代OpenVPN作为路由器自动翻墙方案/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/07/Replacing-OpenVPN-with-tinc-on-Tomato-OpenWRT-dd-wrt-for-bypassing-GFW-使用tinc替代OpenVPN作为路由器自动翻墙方案/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -198,148 +198,236 @@
 <p>欢迎转载！转载时请保留作者，注明出处，并在转文中附带原文链接。谢谢！</p>
 <p>多年前发现了<a href="https://code.google.com/p/autoddvpn/" target="_blank" rel="external">autoddvpn</a>项目以后，从之前使用<a href="http://www.dd-wrt.com/" target="_blank" rel="external">dd-wrt</a>到现在用<a href="http://tomato.groov.pl/" target="_blank" rel="external">Tomato</a>，都是把这套没人维护的代码不断的修修补补地放到路由上面用。虽然有一些其他搭梯子的方案，但是用OpenVPN加上自定义的routes，用起来感觉是最干净的，所有的用户都不需要在自己的电脑中设置，连接这个路由器的网络就可以自动爬梯了。</p>
 <p>不过随着最近GFW越来越强大，它的Advanced <a href="http://en.wikipedia.org/wiki/Deep_packet_inspection" target="_blank" rel="external">DPI</a>对普通的OpenVPN连接会进行干扰，导致使用一段时间就断开，或者干脆就连不上。按照我一贯的作风（懒），装个<a href="https://www.stunnel.org/index.html" target="_blank" rel="external">stunnel</a>以后，把OpenVPN以TCP模式通过stunnel连接也将就用着了。</p>
-<p>然后慢慢地发现，在�吐量高的情况下，通过OpenVPN的所有流量，延迟都会变成非常高（4000ms+），要是看YouTube 1080p的话，别说开其他网页，能不buffering就不错了。OpenVPN用TCP的性能本来就没有UDP的好，加上一层stunnel，性能就更加不要提了。而且stunnel和OpenVPN全部都在路由器上面跑，除非你的是RT-AC68U、R7000这样的ARM路由，否则性能也就别想好到什么地方去了。</p>
-<p>也因为这个原因，每当打开Google+各种卡的时候，�都会很自然地打开Chrome寻找替代方案……直到最近，我遇见了<a href="http://www.tinc-vpn.org/" target="_blank" rel="external">tinc</a>。</p>
+<p>然后慢慢地发现，在吞吐量高的情况下，通过OpenVPN的所有流量，延迟都会变成非常高（4000ms+），要是看YouTube 1080p的话，别说开其他网页，能不buffering就不错了。OpenVPN用TCP的性能本来就没有UDP的好，加上一层stunnel，性能就更加不要提了。而且stunnel和OpenVPN全部都在路由器上面跑，除非你的是RT-AC68U、R7000这样的ARM路由，否则性能也就别想好到什么地方去了。</p>
+<p>也因为这个原因，每当打开Google+各种卡的时候，我都会很自然地打开Chrome寻找替代方案……直到最近，我遇见了<a href="http://www.tinc-vpn.org/" target="_blank" rel="external">tinc</a>。</p>
 <p>其实之前也已经看到过关于tinc的一些介绍，但是总觉得挺麻烦的，许多东西都要自己手动去配置（其实还是懒……）。但是实在忍无可忍了，既然决定折腾，那么就动手吧~</p>
-<p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及�置<a href="https://github.com/maddie/tinc-on-routers" target="_blank" rel="external">上传到了GitHub</a>。</p>
+<p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及配置<a href="https://github.com/maddie/tinc-on-routers" target="_blank" rel="external">上传到了GitHub</a>。</p>
 <p>虽然tinc支持IPv4 and IPv6，但是由于IPv6现在还比较少用的，所以这里就只针对IPv4了。</p>
 <p>下面来简单说一下整个过程（以Tomato为例，其他平台配置应该也相似）：</p>
 <p>###Prerequisites:</p>
 <ol>
-<li>首先���得有一个不在GFW里的服务器。我用的是<a href="http://www.linode.com/" target="_blank" rel="external">Linode</a>东京的VPS，系统使用Arch Linux。最便宜的套餐$10一个月，一次性购买一年/两年有打折~ <a href="https://www.linode.com/?r=ab58c8f4cfc77ba527d444f0bab4e05c28561cea" target="_blank" rel="external">购买链接</a></li>
+<li>首先你得有一个不在GFW里的服务器。我用的是<a href="http://www.linode.com/" target="_blank" rel="external">Linode</a>东京的VPS，系统使用Arch Linux。最便宜的套餐$10一个月，一次性购买一年/两年有打折~ <a href="https://www.linode.com/?r=ab58c8f4cfc77ba527d444f0bab4e05c28561cea" target="_blank" rel="external">购买链接</a></li>
 <li>你需要在路由上安装tinc。这意味着你需要现在路由上部署Optware/Entware。本文使用Entware为例。</li>
 <li>The ability to RTFM and follow instructions.</li>
 </ol>
 <p>###服务器端配置：</p>
 <p><strong>i. Enable IPv4 Forwarding in sysctl.conf</strong></p>
-<p>首先，你必须把服务器的IPv4转发打开。在大多数Linux发行版中，这个选项默认是关闭的。</p>
-<h1 id="sysctl_-w_net-ipv4-ip_forward=1">sysctl -w net.ipv4.ip_forward=1</h1><p>在Arch Linux中，你需要在<code>/etc/sysctl.d/</code>中新建一个文件（例如<code>50-ip_forward.conf</code>）来让这个设置在启动时自动生效。</p>
-<p>在Debian/Ubuntu等系统中，你需要在<code>/etc/sysctl.conf</code>中添加<code>net.ipv4.ip_forward=1</code>来让这个设置在启动时自动生效。</p>
-<p>CentOS的话……请自行Google，真没什�使用经验。</p>
+<p>首先，你必须把服务器的IPv4转发打开。在大多数Linux发行版中，这个选项默认是关闭的。  </p>
+<pre><code><span class="preprocessor"># sysctl -w net.ipv4.ip_forward=<span class="number">1</span></span>
+</code></pre><p>在Arch Linux中，你需要在<code>/etc/sysctl.d/</code>中新建一个文件（例如<code>50-ip_forward.conf</code>）来让这个设置在启动时自动生效。  </p>
+<p>在Debian/Ubuntu等系统中，你需要在<code>/etc/sysctl.conf</code>中添加<code>net.ipv4.ip_forward=1</code>来让这个设置在启动时自动生效。  </p>
+<p>CentOS的话……请自行Google，真没什么使用经验。</p>
 <p><strong>ii. 安装tinc</strong></p>
 <p>我使用的是Arch Linux的community中的tinc，版本为1.0.24-2。AUR中有一个tinc-pre，版本为1.1pre10，这个版本不建议使用，它使用新的experimental协议，配置上会有出入，而且据闻性能没有原来的版本好。</p>
-<h1 id="pacman_-S_tinc">pacman -S tinc</h1><p>在Debian/Ubuntu中则是</p>
-<h1 id="apt-get_install_tinc">apt-get install tinc</h1><p><strong>iii. 配置tinc</strong></p>
+<pre><code><span class="preprocessor"># pacman -S tinc</span>
+</code></pre><p>在Debian/Ubuntu中则是</p>
+<pre><code><span class="preprocessor"># apt-get install tinc</span>
+</code></pre><p><strong>iii. 配置tinc</strong></p>
 <blockquote>
 <p>Arch Linux:</p>
 </blockquote>
 <p>tinc在安装后不会自动在<code>/etc</code>目录下建立文件夹，我们要手动建立：</p>
-<h1 id="mkdir_-p_/etc/tinc/server/hosts">mkdir -p /etc/tinc/server/hosts</h1><p>这里面的<code>server</code>是你的<code>NETNAME</code>，这个名字将用于后面启用服务时使用。<br><code>hosts</code>文件夹用于存放每个host的信息，后面会讲到。</p>
-<p>�入配置文件：</p>
+<pre><code># mkdir -p <span class="regexp">/etc/</span>tinc<span class="regexp">/server/</span>hosts
+</code></pre><p>这里面的<code>server</code>是你的<code>NETNAME</code>，这个名字将用于后面启用服务时使用。<br><code>hosts</code>文件夹用于存放每个host的信息，后面会讲到。</p>
+<p>写入配置文件：</p>
 <p>(a) <code>tinc.conf</code>的内容</p>
-<pre><code><span class="comment"># cd /etc/tinc/server</span>
-<span class="comment"># cat tinc.conf</span>
-<span class="setting">Name = <span class="value">server</span></span>
+<pre><code><span class="comment"># cd /etc/tinc/server  </span>
+<span class="comment"># cat tinc.conf  </span>
+<span class="setting">Name = <span class="value">server  </span></span>
 <span class="setting">Interface = <span class="value">tinc0</span></span>
-</code></pre><p>当中<code>Name</code>的值<code>server</code>为本机（服务器端）的名称。记住你的名称，在后面还会用到。</p>
+</code></pre><p>当中<code>Name</code>的值<code>server</code>为本机（服务器端）的名称。记住你的名称，在后面还会用到。 </p>
 <p>(b) <code>tinc-up</code>的内容</p>
-<h1 id="cat_tinc-up">cat tinc-up</h1><p>  #!/bin/sh<br>  ip link set $INTERFACE up<br>  ip addr add 192.168.4.1 dev $INTERFACE</p>
-<p>  ip route add 192.168.4.254 dev $INTERFACE proto kernel scope link src 192.168.4.1</p>
-<p>  iptables -A FORWARD -s 192.168.4.0/24 -j ACCEPT<br>  iptables -A FORWARD -d 192.168.4.0/24 -j ACCEPT<br>  iptables -A POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0</p>
-<p>我使用的网段是192.168.4.0/24，你可以根据自己的需要对这个进行更改。记得把其他地方的subnet也改掉哦！最后的iptables规则中，第三条的eth0是你的VPS面向公网的网卡。</p>
+<pre><code><span class="preprocessor"># cat tinc-up</span>
+<span class="preprocessor">#!/bin/sh</span>
+ip link <span class="built_in">set</span> $INTERFACE up
+ip addr add <span class="number">192.168</span><span class="number">.4</span><span class="number">.1</span> dev $INTERFACE
+
+ip route add <span class="number">192.168</span><span class="number">.4</span><span class="number">.254</span> dev $INTERFACE proto kernel scope link src <span class="number">192.168</span><span class="number">.4</span><span class="number">.1</span>
+
+iptables -A FORWARD -s <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -A FORWARD -d <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -A POSTROUTING -t nat -s <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j MASQUERADE -o eth0
+</code></pre><p>我使用的网段是192.168.4.0/24，你可以根据自己的需要对这个进行更改。记得把其他地方的subnet也改掉哦！最后的iptables规则中，第三条的eth0是你的VPS面向公网的网卡。</p>
 <p>(c) <code>tinc-down</code>的内容</p>
-<h1 id="cat_tinc-down">cat tinc-down</h1><p>  #!/bin/sh<br>  ip link set $INTERFACE down</p>
-<p>  iptables -D FORWARD -s 192.168.4.0/24 -j ACCEPT<br>  iptables -D FORWARD -d 192.168.4.0/24 -j ACCEPT<br>  iptables -D POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0</p>
-<p>同样，根据需要修改subnet，必须与tinc-up中的保持一致。</p>
+<pre><code><span class="comment"># cat tinc-down</span>
+<span class="shebang">#!/bin/sh</span>
+ip link <span class="built_in">set</span> <span class="variable">$INTERFACE</span> down
+
+iptables -D FORWARD <span class="operator">-s</span> <span class="number">192.168</span>.<span class="number">4.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -D FORWARD <span class="operator">-d</span> <span class="number">192.168</span>.<span class="number">4.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -D POSTROUTING -t nat <span class="operator">-s</span> <span class="number">192.168</span>.<span class="number">4.0</span>/<span class="number">24</span> -j MASQUERADE -o eth0
+</code></pre><p>同样，根据需要修改subnet，必须与tinc-up中的保持一致。</p>
 <p>(d) <code>hosts/server</code>的内容</p>
-<p>在这里，<code>server</code>这个文件名必须对应前面在<code>tinc.conf</code>中设置的<code>Name</code>参数的值。tinc会根据<code>Name</code>去匹配<code>hosts</code>目录下�配置文件。</p>
-<h1 id="cat_hosts/server">cat hosts/server</h1><pre><code>Address = YOUR<span class="class">.IP</span><span class="class">.ADDRESS</span> (你的公网地址)
-</code></pre><p>  Port = 655<br>  Subnet = 0.0.0.0/0</p>
-<p>需要填写的配置文件只有这四个。完成以后，生成private key：</p>
-<h1 id="tincd_-n_server_-K4096">tincd -n server -K4096</h1><pre><code><span class="label">Generating</span> <span class="number">4096</span> <span class="keyword">bits </span>keys:
-</code></pre><p>  ………………………………………………………………………………………………………………………………………………………………………….++ p<br>  …………………………….++ q<br>  Done.<br>  Please enter a file to save private RSA key to [/etc/tinc/server/rsa_key.priv]: (私钥)<br>  Please enter a file to save public RSA key to [/etc/tinc/server/hosts/server]: (公钥)</p>
-<p>这样会生成一个4096 bit的私钥，生成的密钥保存在默认路径即可。<code>-n</code>参数后面的<code>server</code>为你的<code>NETNAME</code>，即<code>/etc/tinc/server</code>中<code>server</code>部分。</p>
+<p>在这里，<code>server</code>这个文件名必须对应前面在<code>tinc.conf</code>中设置的<code>Name</code>参数的值。tinc会根据<code>Name</code>去匹配<code>hosts</code>目录下的配置文件。</p>
+<pre><code><span class="preprocessor"># cat hosts/server</span>
+Address = YOUR.IP.ADDRESS (你的公网地址)
+Port = <span class="number">655</span>
+Subnet = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">0</span>
+</code></pre><p>需要填写的配置文件只有这四个。完成以后，生成private key：</p>
+<pre><code><span class="comment"># tincd -n server -K4096</span>
+Generating <span class="number">4096</span> bits <span class="built_in">keys</span>:
+.................................................................................................................................................................................................++ p
+..................................++ q
+Done.
+Please enter <span class="operator">a</span> <span class="built_in">file</span> <span class="built_in">to</span> save <span class="keyword">private</span> RSA key <span class="built_in">to</span> [/etc/tinc/server/rsa_key.priv]: (私钥)
+Please enter <span class="operator">a</span> <span class="built_in">file</span> <span class="built_in">to</span> save public RSA key <span class="built_in">to</span> [/etc/tinc/server/hosts/server]: (公钥)
+</code></pre><p>这样会生成一个4096 bit的私钥，生成的密钥保存在默认路径即可。<code>-n</code>参数后面的<code>server</code>为你的<code>NETNAME</code>，即<code>/etc/tinc/server</code>中<code>server</code>部分。</p>
 <blockquote>
 <p>Debian/Ubuntu</p>
 </blockquote>
 <p>配置的过程基本相同，但是因为手上没有Debian/Ubuntu的机器，也懒得整VM，所以不能保证正确性。</p>
 <p>根据Ubuntu的manpage，Debian/Ubuntu上的tinc所使用的config结构与Arch Linux不同：<code>tincd</code>将直接读取<code>/etc/tinc</code>中的内容，无需指定<code>NETNAME</code>。即：</p>
-<h1 id="mkdir_-p_/etc/tinc/hosts">mkdir -p /etc/tinc/hosts</h1><pre><code><span class="comment"># cd /etc/tinc</span>
-<span class="comment"># cat tinc.conf</span>
-<span class="setting">Name = <span class="value">server</span></span>
-<span class="setting">Interface = <span class="value">tinc0</span></span>
-</code></pre><h1 id="cat_tinc-up-1">cat tinc-up</h1><p>  #!/bin/sh<br>  ip link set $INTERFACE up<br>  ip addr add 192.168.4.1 dev $INTERFACE</p>
-<p>  ip route add 192.168.4.254 dev $INTERFACE proto kernel scope link src 192.168.4.1</p>
-<p>  iptables -A FORWARD -s 192.168.4.0/24 -j ACCEPT<br>  iptables -A FORWARD -d 192.168.4.0/24 -j ACCEPT<br>  iptables -A POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0</p>
-<h1 id="cat_tinc-down-1">cat tinc-down</h1><p>  #!/bin/sh<br>  ip link set $INTERFACE down</p>
-<p>  iptables -D FORWARD -s 192.168.4.0/24 -j ACCEPT<br>  iptables -D FORWARD -d 192.168.4.0/24 -j ACCEPT<br>  iptables -D POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0</p>
-<h1 id="cat_hosts/server-1">cat hosts/server</h1><pre><code>Address = YOUR<span class="class">.IP</span><span class="class">.ADDRESS</span> (你的公网地址)
-</code></pre><p>  Port = 655<br>  Subnet = 0.0.0.0/0</p>
-<h1 id="tincd_-K4096_（注意此处不带-n参数）">tincd -K4096   （注意此处不带-n参数）</h1><pre><code><span class="label">Generating</span> <span class="number">4096</span> <span class="keyword">bits </span>keys:
-</code></pre><p>  ………………………………………………………………………………………………………………………………………………………………………….++ p<br>  …………………………….++ q<br>  Done.<br>  Please enter a file to save private RSA key to [/etc/tinc/rsa_key.priv]:<br>  Please enter a file to save public RSA key to [/etc/tinc/hosts/server]:</p>
-<p>服务器端的配置暂时告一段落。</p>
+<pre><code><span class="preprocessor"># mkdir -p /etc/tinc/hosts</span>
+
+<span class="preprocessor"># cd /etc/tinc  </span>
+<span class="preprocessor"># cat tinc.conf  </span>
+Name = server  
+Interface = tinc0
+
+<span class="preprocessor"># cat tinc-up</span>
+<span class="preprocessor">#!/bin/sh</span>
+ip link <span class="built_in">set</span> $INTERFACE up
+ip addr add <span class="number">192.168</span><span class="number">.4</span><span class="number">.1</span> dev $INTERFACE
+
+ip route add <span class="number">192.168</span><span class="number">.4</span><span class="number">.254</span> dev $INTERFACE proto kernel scope link src <span class="number">192.168</span><span class="number">.4</span><span class="number">.1</span>
+
+iptables -A FORWARD -s <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -A FORWARD -d <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -A POSTROUTING -t nat -s <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j MASQUERADE -o eth0
+
+<span class="preprocessor"># cat tinc-down</span>
+<span class="preprocessor">#!/bin/sh</span>
+ip link <span class="built_in">set</span> $INTERFACE down
+
+iptables -D FORWARD -s <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -D FORWARD -d <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j ACCEPT
+iptables -D POSTROUTING -t nat -s <span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span> -j MASQUERADE -o eth0
+
+<span class="preprocessor"># cat hosts/server</span>
+Address = YOUR.IP.ADDRESS (你的公网地址)
+Port = <span class="number">655</span>
+Subnet = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">0</span>
+
+<span class="preprocessor"># tincd -K4096   （注意此处不带-n参数）</span>
+Generating <span class="number">4096</span> bits keys:
+.................................................................................................................................................................................................++ p
+..................................++ q
+Done.
+Please enter a file to save <span class="keyword">private</span> RSA key to [/etc/tinc/rsa_key.priv]:
+Please enter a file to save <span class="keyword">public</span> RSA key to [/etc/tinc/hosts/server]:
+</code></pre><p>服务器端的配置暂时告一段落。</p>
 <p>###客户端（路由器）配置：</p>
 <p>这里我仅以Tomato + <a href="https://github.com/Entware/entware" target="_blank" rel="external">Entware</a>为例。使用其他平台的配置应该大同小异，请自行摸索。</p>
-<p>路由器默认你已刷Tomato固件，并��配置Entware环境。具体操作不在此介绍，请自行Google。</p>
+<p>路由器默认你已刷Tomato固件，并且配置Entware环境。具体操作不在此介绍，请自行Google。</p>
 <p>文中Entware安装路径为默认的<code>/opt</code>。</p>
 <p><strong>i. 安装tinc</strong></p>
 <p>使用Entware的<code>opkg</code>工具安装<code>tinc</code>以及<code>git</code>：</p>
-<h1 id="opkg_install_tinc">opkg install tinc</h1><pre><code><span class="preprocessor"># opkg install git</span>
-</code></pre><p>完成安��后，<code>git</code>可能需要进行额外配置，步骤不在此细述。</p>
+<pre><code><span class="preprocessor"># opkg install tinc</span>
+<span class="preprocessor"># opkg install git</span>
+</code></pre><p>完成安装后，<code>git</code>可能需要进行额外配置，步骤不在此细述。</p>
 <p><strong>ii. 配置tinc</strong></p>
 <p>安装完成后，从GitHub上将脚本clone下来：</p>
-<h1 id="git_clone_https://github-com/maddie/tinc-on-routers-git_/opt/etc/tinc">git clone <a href="https://github.com/maddie/tinc-on-routers.git" target="_blank" rel="external">https://github.com/maddie/tinc-on-routers.git</a> /opt/etc/tinc</h1><p>执行配置脚本<code>setup.sh</code>��随手写的，有bug请大喊）</p>
-<h1 id="cd_/opt/etc/tinc">cd /opt/etc/tinc</h1><pre><code><span class="preprocessor"># ./setup.sh</span>
+<pre><code># git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/maddie/tinc-<span class="keyword">on</span>-routers.git /<span class="keyword">opt</span>/etc/tinc
+</code></pre><p>执行配置脚本<code>setup.sh</code>（随手写的，有bug请大喊）</p>
+<pre><code><span class="comment"># cd /opt/etc/tinc</span>
+<span class="comment"># ./setup.sh</span>
 
-Enter your router name [<span class="keyword">client</span>]: (输入这个节点的名称，默认<span class="keyword">client</span>)
-</code></pre><p>  No input. Defaulting to ‘client’.</p>
-<p>  Enter your server name [server]: (输入需要服务器的名称，请参考服务器端tinc.conf中Name参数的值)<br>  No input. Defaulting to ‘server’.</p>
-<p>  Enter your local address [192.168.4.2]: (这个节点的IP地址，必须在服务器配置的Subnet中，且唯一)<br>  No input. Defaulting to ‘192.168.4.2’.</p>
-<pre><code><span class="label">Enter</span> remote <span class="keyword">subnet </span>[<span class="number">192</span>.<span class="number">168</span>.<span class="number">4</span>.<span class="number">0</span>/<span class="number">24</span>]: (远端配置的<span class="keyword">subnet，上面local </span><span class="keyword">address应在这个子网范围中)
-</span><span class="label">No</span> input. Defaulting to <span class="string">'192.168.4.0/24'</span>.
-</code></pre><p>  Log file [/opt/var/log/tincd.log]: (Log文件路径，通常默认即可)<br>  No input. Defaulting to ‘/opt/var/log/tincd.log’.</p>
-<p>  tinc config path [/opt/etc/tinc]: (客户端的tinc配置文件路径，通常默认即可)<br>  No input. Defaulting to ‘/opt/etc/tinc’.</p>
-<p>  Your LAN Subnet [192.168.1.0/24]: (你的LAN所在Subnet，用于设置iptables规则)<br>  No input. Defaulting to ‘192.168.1.0/24’.</p>
-<p>  Configuration summary: (这里会显示你输入的信息)<br>  Local name: client<br>  Remote name: server<br>  Local address: 192.168.4.2<br>  Log file: /opt/var/log/tincd.log<br>  Config path: /opt/etc/tinc<br>  LAN Subnet: 192.168.1.0/24</p>
-<pre><code>(确认无误后，按任意键继续。否则按Ctrl+C终止配置脚本。)
-Press any key <span class="keyword">to</span> <span class="keyword">continue</span>, <span class="keyword">otherwise</span> hit Ctrl+C <span class="keyword">to</span> abort.
-</code></pre><p>  Applying configurations…</p>
-<p>  (生成密钥)<br>  Generating private key for this client…<br>  This may take a few minutes on a router.<br>  Please wait patiently. :)</p>
-<p>  Generating 4096 bits keys:<br>  ………………………………………………………………………………………………………………………………………………………………………….++ p<br>  …………………………….++ q<br>  Done.<br>  Please enter a file to save private RSA key to [/opt/etc/tinc/rsa_key.priv]:<br>  Please enter a file to save public RSA key to [/opt/etc/tinc/hosts/client]:</p>
-<pre><code><span class="variable">Done</span>.
-</code></pre><p>  Please add these lines to your WAN Up script:</p>
-<blockquote>
-<p>sleep 15<br>modprobe tun &amp;&amp; tincd</p>
-</blockquote>
-<p>客户端的配置暂告一段落。</p>
+Enter your router name [client]: (输入这个节点的名称，默认client)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'client'</span>.
+
+Enter your server name [server]: (输入需要服务器的名称，请参考服务器端tinc.conf中Name参数的值)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'server'</span>.
+
+Enter your <span class="built_in">local</span> address [<span class="number">192.168</span><span class="number">.4</span><span class="number">.2</span>]: (这个节点的IP地址，必须在服务器配置的Subnet中，且唯一)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'192.168.4.2'</span>.
+
+Enter remote subnet [<span class="number">192.168</span><span class="number">.4</span><span class="number">.0</span>/<span class="number">24</span>]: (远端配置的subnet，上面<span class="built_in">local</span> address应在这个子网范围中)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'192.168.4.0/24'</span>.
+
+Log <span class="built_in">file</span> [/opt/var/<span class="built_in">log</span>/tincd.<span class="built_in">log</span>]: (Log文件路径，通常默认即可)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'/opt/var/log/tincd.log'</span>.
+
+tinc config path [/opt/etc/tinc]: (客户端的tinc配置文件路径，通常默认即可)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'/opt/etc/tinc'</span>.
+
+Your LAN Subnet [<span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span>]: (你的LAN所在Subnet，用于设置iptables规则)
+No input. Defaulting <span class="built_in">to</span> <span class="string">'192.168.1.0/24'</span>.
+
+Configuration summary: (这里会显示你输入的信息)
+Local name: client
+Remote name: server
+Local address: <span class="number">192.168</span><span class="number">.4</span><span class="number">.2</span>
+Log <span class="built_in">file</span>: /opt/var/<span class="built_in">log</span>/tincd.<span class="built_in">log</span>
+Config path: /opt/etc/tinc
+LAN Subnet: <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span>
+
+(确认无误后，按任意键继续。否则按Ctrl+C终止配置脚本。)
+Press <span class="keyword">any</span> key <span class="built_in">to</span> continue, otherwise hit Ctrl+C <span class="built_in">to</span> abort.
+
+Applying configurations...
+
+(生成密钥)
+Generating <span class="keyword">private</span> key <span class="keyword">for</span> this client...
+This may take <span class="operator">a</span> few minutes <span class="command"><span class="keyword">on</span> <span class="title">a</span> <span class="title">router</span>.</span>
+Please <span class="built_in">wait</span> patiently. :)
+
+Generating <span class="number">4096</span> bits <span class="built_in">keys</span>:
+.................................................................................................................................................................................................++ p
+..................................++ q
+Done.
+Please enter <span class="operator">a</span> <span class="built_in">file</span> <span class="built_in">to</span> save <span class="keyword">private</span> RSA key <span class="built_in">to</span> [/opt/etc/tinc/rsa_key.priv]:
+Please enter <span class="operator">a</span> <span class="built_in">file</span> <span class="built_in">to</span> save public RSA key <span class="built_in">to</span> [/opt/etc/tinc/hosts/client]:
+
+Done.
+
+Please <span class="built_in">add</span> these <span class="keyword">lines</span> <span class="built_in">to</span> your WAN Up script:
+
+&gt; sleep <span class="number">15</span>
+&gt; modprobe tun &amp;&amp; tincd
+</code></pre><p>客户端的配置暂告一段落。</p>
 <p>###交换公钥：</p>
 <p>完成两边的配置以后，需要把生成的公钥放到另外的节点上。如果你是一直按照本文的设置进行的话，那么：</p>
 <p>服务器端公钥位于：</p>
 <blockquote>
 <p>Arch Linux</p>
 </blockquote>
-<p>  /etc/tinc/server/hosts/server</p>
-<blockquote>
+<pre><code>/etc/tinc/<span class="keyword">server</span>/hosts/<span class="keyword">server</span>
+</code></pre><blockquote>
 <p>Debian/Ubuntu</p>
 </blockquote>
-<p>  /etc/tinc/hosts/server</p>
-<p>客户端公钥位于：</p>
-<p>  /opt/etc/tinc/hosts/client</p>
-<p>tinc的公钥，当中实际上还包括对应节点的连接信息。例如，在<code>/etc/tinc/server/hosts/server</code>中：</p>
-<p>  Address = YOUR.IP.ADDRESS<br>    Port = 655<br>    Subnet = 0.0.0.0/0</p>
-<p>这代表<code>tincd</code>将会在<code>YOUR.IP.ADDRESS</code>的<code>655</code>端口上监听，允许来自<code>0.0.0.0/0</code>子网的用户。</p>
+<pre><code><span class="regexp">/etc/</span>tinc<span class="regexp">/hosts/</span>server
+</code></pre><p>客户端公钥位于：</p>
+<pre><code><span class="regexp">/opt/</span>etc<span class="regexp">/tinc/</span>hosts<span class="regexp">/client</span>
+</code></pre><p>tinc的公钥，当中实际上还包括对应节点的连接信息。例如，在<code>/etc/tinc/server/hosts/server</code>中：</p>
+<pre><code>Address = YOUR.IP.ADDRESS
+Port = <span class="number">655</span>
+Subnet = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>/<span class="number">0</span>
+</code></pre><p>这代表<code>tincd</code>将会在<code>YOUR.IP.ADDRESS</code>的<code>655</code>端口上监听，允许来自<code>0.0.0.0/0</code>子网的用户。</p>
 <p>在<code>/etc/tinc/hosts/client</code>中：</p>
-<p>  Subnet = 192.168.4.2</p>
-<p>则表示该节点被分配到的子网为<code>192.168.4.2/32</code>。�这里其实可以看出，tinc支持将一个Subnet分配给一个节点，让该节点通过DHCP或者static routing的方式来对整个VPN进行访问。但是我们只是用于简单的routing作gateway，因此分配一个地址就足够了。</p>
+<pre><code>Subnet = <span class="number">192.168</span><span class="number">.4</span><span class="number">.2</span>
+</code></pre><p>则表示该节点被分配到的子网为<code>192.168.4.2/32</code>。从这里其实可以看出，tinc支持将一个Subnet分配给一个节点，让该节点通过DHCP或者static routing的方式来对整个VPN进行访问。但是我们只是用于简单的routing作gateway，因此分配一个地址就足够了。</p>
 <p>那么，交换公钥这个动作就如字面所说的一样了。将服务器端的<code>/etc/tinc/server/hosts/server</code>放到客户端（路由器）的<code>/opt/etc/tinc/hosts</code>下；再将客户端的<code>/opt/etc/tinc/hosts/client</code>放到服务器端的<code>/etc/tinc/server/hosts</code>下。</p>
-<p>这样，两边通过读取<code>tinc.conf</code>中的<code>Name</code>来决定自己的身份，客户端通过其���的<code>ConnectTo</code>参数来决定连接的节点，然后再通过<code>hosts</code>中的公钥和各自的私钥来进行身份的验证，最后建立连接。</p>
+<p>这样，两边通过读取<code>tinc.conf</code>中的<code>Name</code>来决定自己的身份，客户端通过其中的<code>ConnectTo</code>参数来决定连接的节点，然后再通过<code>hosts</code>中的公钥和各自的私钥来进行身份的验证，最后建立连接。</p>
 <p>###tinc服务自启动</p>
 <p>其实都比较简单：</p>
 <p>服务器端：</p>
 <blockquote>
 <p>Arch Linux</p>
 </blockquote>
-<h1 id="systemctl_enable_tincd@server">systemctl enable tincd@server</h1><pre><code><span class="comment"># systemctl start tincd<span class="doctag">@server</span></span>
+<pre><code><span class="comment"># systemctl enable tincd<span class="doctag">@server</span></span>
+<span class="comment"># systemctl start tincd<span class="doctag">@server</span></span>
 </code></pre><p>注意<code>@</code>后面的<code>server</code>是你的<code>NETNAME</code>，即<code>/etc/tinc/server</code>中<code>server</code>部分。</p>
 <blockquote>
 <p>Debian/Ubuntu</p>
 </blockquote>
-<h1 id="update-rc-d_-f_tincd_defaults">update-rc.d -f tincd defaults</h1><pre><code><span class="preprocessor"># service tincd restart</span>
+<pre><code># <span class="operator"><span class="keyword">update</span>-rc.<span class="keyword">d</span> -<span class="keyword">f</span> tincd <span class="keyword">defaults</span>
+# service tincd restart</span>
 </code></pre><p>客户端（路由器）：</p>
 <p>Tomato的网页GUI中，找到Administration -&gt; Scripts -&gt; WAN Up，填入：</p>
-<p>  sleep 15<br>  modprobe tun &amp;&amp; tincd</p>
-<p>大功告成！</p>
-<p>PS: GitHub上我放的脚本其实跟autoddvpn的非常相似，基本上只是把OpenVPN换成了tinc而已。在GitHub的README中，我会简单说明里面各个文件的用途。另外，如果你需要配置多于一个客户端，你只需要把客户端的Subnet地址（即上文中的192.168.4.2）换一下，重新生成private key，和服务器端再交换一下公钥���可以了。</p>
+<pre><code><span class="built_in">sleep</span> <span class="number">15</span>
+modprobe tun &amp;&amp; tincd
+</code></pre><p>大功告成！</p>
+<p>PS: GitHub上我放的脚本其实跟autoddvpn的非常相似，基本上只是把OpenVPN换成了tinc而已。在GitHub的README中，我会简单说明里面各个文件的用途。另外，如果你需要配置多于一个客户端，你只需要把客户端的Subnet地址（即上文中的192.168.4.2）换一下，重新生成private key，和服务器端再交换一下公钥就可以了。</p>
 <p>如果文中有哪里措辞不当或者有误，欢迎指正！谢谢！</p>
 <p>Any comments or questions, please post here or email me: maddie at emzee dot be</p>
 <p>You can also open issues on GitHub.</p>
