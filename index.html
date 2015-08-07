@@ -314,14 +314,12 @@
 <p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及配置<a href="https://github.com/maddie/tinc-on-routers" target="_blank" rel="external">上传到了GitHub</a>。</p>
 <p>虽然tinc支持IPv4 and IPv6，但是由于IPv6现在还比较少用的，所以这里就只针对IPv4了。</p>
 <p>下面来简单说一下整个过程（以Tomato为例，其他平台配置应该也相似）：</p>
-<p>###Prerequisites:</p>
-<ol>
+<h3 id="Prerequisites">Prerequisites</h3><ol>
 <li>首先你得有一个不在GFW里的服务器。我用的是<a href="http://www.linode.com/" target="_blank" rel="external">Linode</a>东京的VPS，系统使用Arch Linux。最便宜的套餐$10一个月，一次性购买一年/两年有打折~ <a href="https://www.linode.com/?r=ab58c8f4cfc77ba527d444f0bab4e05c28561cea" target="_blank" rel="external">购买链接</a></li>
 <li>你需要在路由上安装tinc。这意味着你需要现在路由上部署Optware/Entware。本文使用Entware为例。</li>
 <li>The ability to RTFM and follow instructions.</li>
 </ol>
-<p>###服务器端配置：</p>
-<p><strong>i. Enable IPv4 Forwarding in sysctl.conf</strong></p>
+<h3 id="服务器端配置">服务器端配置</h3><p><strong>i. Enable IPv4 Forwarding in sysctl.conf</strong></p>
 <p>首先，你必须把服务器的IPv4转发打开。在大多数Linux发行版中，这个选项默认是关闭的。  </p>
 <pre><code><span class="preprocessor"># sysctl -w net.ipv4.ip_forward=<span class="number">1</span></span>
 </code></pre><p>在Arch Linux中，你需要在<code>/etc/sysctl.d/</code>中新建一个文件（例如<code>50-ip_forward.conf</code>）来让这个设置在启动时自动生效。  </p>
@@ -426,8 +424,7 @@ Done.
 Please enter a file to save <span class="keyword">private</span> RSA key to [/etc/tinc/rsa_key.priv]:
 Please enter a file to save <span class="keyword">public</span> RSA key to [/etc/tinc/hosts/server]:
 </code></pre><p>服务器端的配置暂时告一段落。</p>
-<p>###客户端（路由器）配置：</p>
-<p>这里我仅以Tomato + <a href="https://github.com/Entware/entware" target="_blank" rel="external">Entware</a>为例。使用其他平台的配置应该大同小异，请自行摸索。</p>
+<h3 id="客户端（路由器）配置">客户端（路由器）配置</h3><p>这里我仅以Tomato + <a href="https://github.com/Entware/entware" target="_blank" rel="external">Entware</a>为例。使用其他平台的配置应该大同小异，请自行摸索。</p>
 <p>路由器默认你已刷Tomato固件，并且配置Entware环境。具体操作不在此介绍，请自行Google。</p>
 <p>文中Entware安装路径为默认的<code>/opt</code>。</p>
 <p><strong>i. 安装tinc</strong></p>
@@ -495,8 +492,7 @@ Please <span class="built_in">add</span> these <span class="keyword">lines</span
 &gt; sleep <span class="number">15</span>
 &gt; modprobe tun &amp;&amp; tincd
 </code></pre><p>客户端的配置暂告一段落。</p>
-<p>###交换公钥：</p>
-<p>完成两边的配置以后，需要把生成的公钥放到另外的节点上。如果你是一直按照本文的设置进行的话，那么：</p>
+<h3 id="交换公钥">交换公钥</h3><p>完成两边的配置以后，需要把生成的公钥放到另外的节点上。如果你是一直按照本文的设置进行的话，那么：</p>
 <p>服务器端公钥位于：</p>
 <blockquote>
 <p>Arch Linux</p>
@@ -518,8 +514,7 @@ Subnet = <span class="number">0.0</span><span class="number">.0</span><span clas
 </code></pre><p>则表示该节点被分配到的子网为<code>192.168.4.2/32</code>。从这里其实可以看出，tinc支持将一个Subnet分配给一个节点，让该节点通过DHCP或者static routing的方式来对整个VPN进行访问。但是我们只是用于简单的routing作gateway，因此分配一个地址就足够了。</p>
 <p>那么，交换公钥这个动作就如字面所说的一样了。将服务器端的<code>/etc/tinc/server/hosts/server</code>放到客户端（路由器）的<code>/opt/etc/tinc/hosts</code>下；再将客户端的<code>/opt/etc/tinc/hosts/client</code>放到服务器端的<code>/etc/tinc/server/hosts</code>下。</p>
 <p>这样，两边通过读取<code>tinc.conf</code>中的<code>Name</code>来决定自己的身份，客户端通过其中的<code>ConnectTo</code>参数来决定连接的节点，然后再通过<code>hosts</code>中的公钥和各自的私钥来进行身份的验证，最后建立连接。</p>
-<p>###tinc服务自启动</p>
-<p>其实都比较简单：</p>
+<h3 id="tinc服务自启动">tinc服务自启动</h3><p>其实都比较简单：</p>
 <p>服务器端：</p>
 <blockquote>
 <p>Arch Linux</p>
@@ -608,7 +603,7 @@ modprobe tun &amp;&amp; tincd
 
           <div class="site-state-item site-state-tags">
             
-              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">tags</span>
               
           </div>
