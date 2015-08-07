@@ -49,7 +49,7 @@
 <meta property="og:description" content="作者：Maddie
 欢迎转载！转载时请保留作者，注明出处，并在转文中附带原文链接。谢谢！
 多年前发现了autoddvpn项目以后，从之前使用dd-wrt到现在用Tomato，都是把这套没人维护的代码不断的修修补补地放到路由上面用。虽然有一些其他搭梯子的方案，但是用OpenVPN加上自定义的routes，用起来感觉是最干净的，所有的用户都不需要在自己的电脑中设置，连接这个路由器的网络就可以自动爬梯了">
-<meta property="og:updated_time" content="2015-08-07T09:02:45.000Z">
+<meta property="og:updated_time" content="2015-08-07T09:07:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案">
 <meta name="twitter:description" content="作者：Maddie
@@ -238,6 +238,7 @@
 <p>也因为这个原因，每当打开Google+各种卡的时候，我都会很自然地打开Chrome寻找替代方案……直到最近，我遇见了<a href="http://www.tinc-vpn.org/" target="_blank" rel="external">tinc</a>。</p>
 <p>其实之前也已经看到过关于tinc的一些介绍，但是总觉得挺麻烦的，许多东西都要自己手动去配置（其实还是懒……）。但是实在忍无可忍了，既然决定折腾，那么就动手吧~</p>
 <p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及配置<a href="https://github.com/maddie/tinc-on-routers" target="_blank" rel="external">上传到了GitHub</a>。</p>
+<a id="more"></a>
 <p>虽然tinc支持IPv4 and IPv6，但是由于IPv6现在还比较少用的，所以这里就只针对IPv4了。</p>
 <p>下面来简单说一下整个过程（以Tomato为例，其他平台配置应该也相似）：</p>
 <h3 id="Prerequisites">Prerequisites</h3><ol>

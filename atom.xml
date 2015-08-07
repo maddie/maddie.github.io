@@ -5,7 +5,7 @@
   <subtitle><![CDATA[random thoughts goes here.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.emzee.be//"/>
-  <updated>2015-08-07T08:49:24.000Z</updated>
+  <updated>2015-08-07T09:07:33.000Z</updated>
   <id>http://blog.emzee.be//</id>
   
   <author>
@@ -20,10 +20,11 @@
     <link href="http://blog.emzee.be/2015/08/07/Hello-Hexo/"/>
     <id>http://blog.emzee.be/2015/08/07/Hello-Hexo/</id>
     <published>2015-08-07T07:26:15.000Z</published>
-    <updated>2015-08-07T08:49:24.000Z</updated>
+    <updated>2015-08-07T09:07:33.000Z</updated>
     <content type="html"><![CDATA[<p>Alright.</p>
 <hr>
 <p>I used to enjoy maintaining the things I run: the blog, the VPN services, and a whole bunch of other things. But since work’s been keeping me quite occupied, and I don’t have much time to maintain them, some of those things start to fail, especially the Ghost blog I’ve hosted on my own VPS.</p>
+<a id="more"></a>
 <p>The first blogging system I’ve ever used (and hosted) is WordPress. It was impressive, so many plugins that can fulfill most of your needs, even performance tweaking plugins to help you make your site faster. But after a few years of using and maintaining it, it struck me that most of those features/plugins I’ve installed are useless, and WordPress is such a enormous thing that runs on PHP (no offense PHP guys..) makes it look heavy and insecure. Also, the editor comes with WordPress, although it’s not bad, but it’s counter-intuitive to me, as I’m an avid typist and I’d love to accomplish most of the things with just a keyboard, WordPress’ editor doesn’t let me do that (or at least at that time it didn’t).</p>
 <p>Then, I found out about Ghost. It’s a blogging system based on NodeJS, and posts are written in Markdown. Yay, no more mouse/keyboard switching while typing a post! To keep Ghost running on the server, I used PM2 as the process manager for it. And since one of the updates on the VPS (don’t know which, and I’m running Arch), PM2 always fails to start or resurrect the dumped process (which is Ghost) after boot, and sometimes after it’s been brought up manually, it somehow mysteriously just failed by itself.</p>
 <p>After messing with it for some time, I couldn’t really figure out where the problem lies, so I decided just let it be. Until yesterday, <a href="http://azureland.github.io/" target="_blank" rel="external">a colleague of mine</a> was fiddling with Hexo, and I was just passing by and saw what he was doing. Hey, another blogging framework that uses Markdown? And it can be hosted on GitHub! No more hassle maintaining that PM2 mess! And the great thing is that since it uses Markdown, I can just copy my old articles on my Ghost site and paste it back here, nice!</p>
@@ -33,7 +34,8 @@
     <summary type="html">
     <![CDATA[<p>Alright.</p>
 <hr>
-<p>I used to enjoy maintaining the things I run: the blog, the VPN services, and a whole bunch of other things. But sin]]>
+<p>I used to enjoy maintaining the things I run: the blog, the VPN services, and a whole bunch of other things. But since work’s been keeping me quite occupied, and I don’t have much time to maintain them, some of those things start to fail, especially the Ghost blog I’ve hosted on my own VPS.</p>]]>
+    
     </summary>
     
       <category term="blogging" scheme="http://blog.emzee.be/tags/blogging/"/>
@@ -51,7 +53,7 @@
     <link href="http://blog.emzee.be/2015/08/07/fuck-games-for-windows-via-tinc/"/>
     <id>http://blog.emzee.be/2015/08/07/fuck-games-for-windows-via-tinc/</id>
     <published>2015-08-07T00:35:07.000Z</published>
-    <updated>2015-08-07T09:02:45.000Z</updated>
+    <updated>2015-08-07T09:07:14.000Z</updated>
     <content type="html"><![CDATA[<p>作者：Maddie</p>
 <p>欢迎转载！转载时请保留作者，注明出处，并在转文中附带原文链接。谢谢！</p>
 <p>多年前发现了<a href="https://code.google.com/p/autoddvpn/" target="_blank" rel="external">autoddvpn</a>项目以后，从之前使用<a href="http://www.dd-wrt.com/" target="_blank" rel="external">dd-wrt</a>到现在用<a href="http://tomato.groov.pl/" target="_blank" rel="external">Tomato</a>，都是把这套没人维护的代码不断的修修补补地放到路由上面用。虽然有一些其他搭梯子的方案，但是用OpenVPN加上自定义的routes，用起来感觉是最干净的，所有的用户都不需要在自己的电脑中设置，连接这个路由器的网络就可以自动爬梯了。</p>
@@ -60,6 +62,7 @@
 <p>也因为这个原因，每当打开Google+各种卡的时候，我都会很自然地打开Chrome寻找替代方案……直到最近，我遇见了<a href="http://www.tinc-vpn.org/" target="_blank" rel="external">tinc</a>。</p>
 <p>其实之前也已经看到过关于tinc的一些介绍，但是总觉得挺麻烦的，许多东西都要自己手动去配置（其实还是懒……）。但是实在忍无可忍了，既然决定折腾，那么就动手吧~</p>
 <p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及配置<a href="https://github.com/maddie/tinc-on-routers" target="_blank" rel="external">上传到了GitHub</a>。</p>
+<a id="more"></a>
 <p>虽然tinc支持IPv4 and IPv6，但是由于IPv6现在还比较少用的，所以这里就只针对IPv4了。</p>
 <p>下面来简单说一下整个过程（以Tomato为例，其他平台配置应该也相似）：</p>
 <h3 id="Prerequisites">Prerequisites</h3><ol>
@@ -291,7 +294,13 @@ modprobe tun &amp;&amp; tincd
     <summary type="html">
     <![CDATA[<p>作者：Maddie</p>
 <p>欢迎转载！转载时请保留作者，注明出处，并在转文中附带原文链接。谢谢！</p>
-<p>多年前发现了<a href="https://code.google.com/p/autoddvpn/" target="_blank" rel="exte]]>
+<p>多年前发现了<a href="https://code.google.com/p/autoddvpn/">autoddvpn</a>项目以后，从之前使用<a href="http://www.dd-wrt.com/">dd-wrt</a>到现在用<a href="http://tomato.groov.pl/">Tomato</a>，都是把这套没人维护的代码不断的修修补补地放到路由上面用。虽然有一些其他搭梯子的方案，但是用OpenVPN加上自定义的routes，用起来感觉是最干净的，所有的用户都不需要在自己的电脑中设置，连接这个路由器的网络就可以自动爬梯了。</p>
+<p>不过随着最近GFW越来越强大，它的Advanced <a href="http://en.wikipedia.org/wiki/Deep_packet_inspection">DPI</a>对普通的OpenVPN连接会进行干扰，导致使用一段时间就断开，或者干脆就连不上。按照我一贯的作风（懒），装个<a href="https://www.stunnel.org/index.html">stunnel</a>以后，把OpenVPN以TCP模式通过stunnel连接也将就用着了。</p>
+<p>然后慢慢地发现，在吞吐量高的情况下，通过OpenVPN的所有流量，延迟都会变成非常高（4000ms+），要是看YouTube 1080p的话，别说开其他网页，能不buffering就不错了。OpenVPN用TCP的性能本来就没有UDP的好，加上一层stunnel，性能就更加不要提了。而且stunnel和OpenVPN全部都在路由器上面跑，除非你的是RT-AC68U、R7000这样的ARM路由，否则性能也就别想好到什么地方去了。</p>
+<p>也因为这个原因，每当打开Google+各种卡的时候，我都会很自然地打开Chrome寻找替代方案……直到最近，我遇见了<a href="http://www.tinc-vpn.org/">tinc</a>。</p>
+<p>其实之前也已经看到过关于tinc的一些介绍，但是总觉得挺麻烦的，许多东西都要自己手动去配置（其实还是懒……）。但是实在忍无可忍了，既然决定折腾，那么就动手吧~</p>
+<p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及配置<a href="https://github.com/maddie/tinc-on-routers">上传到了GitHub</a>。</p>]]>
+    
     </summary>
     
       <category term="censorship" scheme="http://blog.emzee.be/tags/censorship/"/>

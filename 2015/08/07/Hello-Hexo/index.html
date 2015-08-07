@@ -49,7 +49,7 @@ I used to enjoy maintaining the things I run: the blog, the VPN services, and a 
 <meta property="og:description" content="Alright.
 
 I used to enjoy maintaining the things I run: the blog, the VPN services, and a whole bunch of other things. But since work’s been keeping me quite occupied, and I don’t have much time to ma">
-<meta property="og:updated_time" content="2015-08-07T08:49:24.000Z">
+<meta property="og:updated_time" content="2015-08-07T09:07:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hello, Hexo.">
 <meta name="twitter:description" content="Alright.
@@ -233,6 +233,7 @@ I used to enjoy maintaining the things I run: the blog, the VPN services, and a 
         <span itemprop="articleBody"><p>Alright.</p>
 <hr>
 <p>I used to enjoy maintaining the things I run: the blog, the VPN services, and a whole bunch of other things. But since work’s been keeping me quite occupied, and I don’t have much time to maintain them, some of those things start to fail, especially the Ghost blog I’ve hosted on my own VPS.</p>
+<a id="more"></a>
 <p>The first blogging system I’ve ever used (and hosted) is WordPress. It was impressive, so many plugins that can fulfill most of your needs, even performance tweaking plugins to help you make your site faster. But after a few years of using and maintaining it, it struck me that most of those features/plugins I’ve installed are useless, and WordPress is such a enormous thing that runs on PHP (no offense PHP guys..) makes it look heavy and insecure. Also, the editor comes with WordPress, although it’s not bad, but it’s counter-intuitive to me, as I’m an avid typist and I’d love to accomplish most of the things with just a keyboard, WordPress’ editor doesn’t let me do that (or at least at that time it didn’t).</p>
 <p>Then, I found out about Ghost. It’s a blogging system based on NodeJS, and posts are written in Markdown. Yay, no more mouse/keyboard switching while typing a post! To keep Ghost running on the server, I used PM2 as the process manager for it. And since one of the updates on the VPS (don’t know which, and I’m running Arch), PM2 always fails to start or resurrect the dumped process (which is Ghost) after boot, and sometimes after it’s been brought up manually, it somehow mysteriously just failed by itself.</p>
 <p>After messing with it for some time, I couldn’t really figure out where the problem lies, so I decided just let it be. Until yesterday, <a href="http://azureland.github.io/" target="_blank" rel="external">a colleague of mine</a> was fiddling with Hexo, and I was just passing by and saw what he was doing. Hey, another blogging framework that uses Markdown? And it can be hosted on GitHub! No more hassle maintaining that PM2 mess! And the great thing is that since it uses Markdown, I can just copy my old articles on my Ghost site and paste it back here, nice!</p>
