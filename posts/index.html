@@ -155,11 +155,6 @@
     <div class="post-content">
       
       
-      最近在工作中的一个项目遇到了需要向Windows中的Mailslot(邮槽)发送消息的需求。因为我们的程序是用Go语言写的，之前有使用过Named Pipes来实现Windows平台上的IPC，使用的是go-winio库，但是这个库里面没有针对Mailslot的支持。作为不会写C/C++的我，本身想着用一个简单的程序作为中间件，监听一个Named Pipe来转发消息到Mailslot，毕竟这种简单的例子Google一下一大堆的。
-然后做好了之后，我仔(wu)细(liao)看了一下C里面向Mailslot发送消息的代码
-int send(char const *msg) { HANDLE sHandle; DWORD bWritten; if ((sHandle = CreateFile( SlotName, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE) { printf(&quot;CreateFile failed with error %d\n&quot;, GetLastError()); return GetLastError(); } if (WriteFile(sHandle, msg, strlen(msg), &amp;bWritten, NULL) == 0) { printf(&quot;WriteFile failed with error %d\n&quot;, GetLastError()); return GetLastError(); } CloseHandle(sHandle); return 0; }  咦，是不是可以用syscall来做这个事情？
-package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;syscall&quot; ) func main() { n, err := Write(`\.
-      
       
     </div>
 
