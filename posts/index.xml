@@ -13,10 +13,10 @@
     
     <item>
       <title>Sending message to Windows Mailslot with Go // 使用Go语言向Windows Mailslot邮槽发送消息</title>
-      <link>http://blog.emzee.be/posts/golang-mailslot-via-syscall/</link>
+      <link>http://blog.emzee.be/posts/send-message-to-mailslot-with-golang/</link>
       <pubDate>Wed, 16 Oct 2019 14:23:07 +0800</pubDate>
       
-      <guid>http://blog.emzee.be/posts/golang-mailslot-via-syscall/</guid>
+      <guid>http://blog.emzee.be/posts/send-message-to-mailslot-with-golang/</guid>
       <description>原来是那么简单</description>
     </item>
     
