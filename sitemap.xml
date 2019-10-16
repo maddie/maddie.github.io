@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/go/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/golang/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/mailslot/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/posts/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/posts/golang-mailslot-via-syscall/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/syscall/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/</loc>
+    <lastmod>2019-10-16T14:23:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/about/</loc>
+    <lastmod>2019-10-16T11:59:01+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/dd-wrt/</loc>
+    <lastmod>2015-08-07T08:35:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/openvpn/</loc>
+    <lastmod>2015-08-07T08:35:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/openwrt/</loc>
+    <lastmod>2015-08-07T08:35:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/posts/fuck-games-for-windows-via-tinc/</loc>
+    <lastmod>2015-08-07T08:35:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/tinc/</loc>
+    <lastmod>2015-08-07T08:35:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/tags/tomato/</loc>
+    <lastmod>2015-08-07T08:35:07+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.emzee.be/categories/</loc>
+  </url>
+  
+</urlset>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mailslot on no man&#39;s land</title>
+    <link>http://blog.emzee.be/tags/mailslot/</link>
+    <description>Recent content in mailslot on no man&#39;s land</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 16 Oct 2019 14:23:07 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.emzee.be/tags/mailslot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Sending message to Windows Mailslot with Go // 使用Go语言向Windows Mailslot邮槽发送消息</title>
+      <link>http://blog.emzee.be/posts/golang-mailslot-via-syscall/</link>
+      <pubDate>Wed, 16 Oct 2019 14:23:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/posts/golang-mailslot-via-syscall/</guid>
+      <description>最近在工作中的一个项目遇到了需要向Windows中的Mailslot(邮槽)发送消息的需求。因为我们的程序是用Go语言写的，之前有使用过Named Pipes来实现Windows平台上的IPC，使用的是go-winio库，但是这个库里面没有针对Mailslot的支持。作为不会写C/C++的我，本身想着用一个简单的程序作为中间件，监听一个Named Pipe来转发消息到Mailslot，毕竟这种简单的例子Google一下一大堆的。
+然后做好了之后，我仔(wu)细(liao)看了一下C里面向Mailslot发送消息的代码
+int send(char const *msg) { HANDLE sHandle; DWORD bWritten; if ((sHandle = CreateFile( SlotName, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE) { printf(&amp;quot;CreateFile failed with error %d\n&amp;quot;, GetLastError()); return GetLastError(); } if (WriteFile(sHandle, msg, strlen(msg), &amp;amp;bWritten, NULL) == 0) { printf(&amp;quot;WriteFile failed with error %d\n&amp;quot;, GetLastError()); return GetLastError(); } CloseHandle(sHandle); return 0; }  咦，是不是可以用syscall来做这个事情？
+package main import ( &amp;quot;errors&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;syscall&amp;quot; ) func main() { n, err := Write(`\\.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on no man&#39;s land</title>
+    <link>http://blog.emzee.be/tags/</link>
+    <description>Recent content in Tags on no man&#39;s land</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 16 Oct 2019 14:23:07 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.emzee.be/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>go</title>
+      <link>http://blog.emzee.be/tags/go/</link>
+      <pubDate>Wed, 16 Oct 2019 14:23:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>http://blog.emzee.be/tags/golang/</link>
+      <pubDate>Wed, 16 Oct 2019 14:23:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mailslot</title>
+      <link>http://blog.emzee.be/tags/mailslot/</link>
+      <pubDate>Wed, 16 Oct 2019 14:23:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/mailslot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>syscall</title>
+      <link>http://blog.emzee.be/tags/syscall/</link>
+      <pubDate>Wed, 16 Oct 2019 14:23:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/syscall/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dd-wrt</title>
+      <link>http://blog.emzee.be/tags/dd-wrt/</link>
+      <pubDate>Fri, 07 Aug 2015 08:35:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/dd-wrt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openvpn</title>
+      <link>http://blog.emzee.be/tags/openvpn/</link>
+      <pubDate>Fri, 07 Aug 2015 08:35:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/openvpn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openwrt</title>
+      <link>http://blog.emzee.be/tags/openwrt/</link>
+      <pubDate>Fri, 07 Aug 2015 08:35:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/openwrt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tinc</title>
+      <link>http://blog.emzee.be/tags/tinc/</link>
+      <pubDate>Fri, 07 Aug 2015 08:35:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/tinc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tomato</title>
+      <link>http://blog.emzee.be/tags/tomato/</link>
+      <pubDate>Fri, 07 Aug 2015 08:35:07 +0800</pubDate>
+      
+      <guid>http://blog.emzee.be/tags/tomato/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

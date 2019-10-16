@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案 :: no man&#39;s land — writing stuff</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="Use tinc as an alternative for OpenVPN and alike solutions"/>
+<meta name="keywords" content="tinc, openvpn"/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="http://blog.emzee.be/posts/fuck-games-for-windows-via-tinc/" />
+
+
+<link rel="stylesheet" href="http://blog.emzee.be/assets/style.css">
+
+  <link rel="stylesheet" href="http://blog.emzee.be/assets/green.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.emzee.be/img/apple-touch-icon-144-precomposed.png">
+
+<link rel="shortcut icon" href="http://blog.emzee.be/img/favicon/green.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案 :: no man&#39;s land — writing stuff" />
+<meta name="twitter:description" content="Use tinc as an alternative for OpenVPN and alike solutions" />
+<meta name="twitter:site" content="http://blog.emzee.be/" />
+<meta name="twitter:creator" content="maddie" />
+<meta name="twitter:image" content="">
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案 :: no man&#39;s land — writing stuff">
+<meta property="og:description" content="Use tinc as an alternative for OpenVPN and alike solutions" />
+<meta property="og:url" content="http://blog.emzee.be/posts/fuck-games-for-windows-via-tinc/" />
+<meta property="og:site_name" content="Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案" />
+<meta property="og:image" content="">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2015-08-07 08:35:07 &#43;0800 CST" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="">
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    no man&#39;s land
+  </div>
+</a>
+
+    </div>
+    <div class="menu-trigger">menu</div>
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/">Home</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="http://blog.emzee.be/posts/fuck-games-for-windows-via-tinc/">Replacing OpenVPN with tinc on Tomato/OpenWRT/dd-wrt for bypassing GFW // 使用tinc替代OpenVPN作为路由器自动翻墙方案</a></h1>
+  <div class="post-meta">
+      
+    <span class="post-date">
+      2015-08-07
+    </span>
+    
+    
+    <span class="post-author">::
+      maddie
+    </span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="http://blog.emzee.be/tags/openwrt/">openwrt</a>&nbsp;
+    
+    #<a href="http://blog.emzee.be/tags/tomato/">tomato</a>&nbsp;
+    
+    #<a href="http://blog.emzee.be/tags/dd-wrt/">dd-wrt</a>&nbsp;
+    
+    #<a href="http://blog.emzee.be/tags/tinc/">tinc</a>&nbsp;
+    
+    #<a href="http://blog.emzee.be/tags/openvpn/">openvpn</a>&nbsp;
+    
+  </span>
+  
+
+  
+
+  <div class="post-content">
+    
+
+<p>作者：Maddie</p>
+
+<p>欢迎转载！转载时请保留作者，注明出处，并在转文中附带原文链接。谢谢！</p>
+
+<p>多年前发现了<a href="https://code.google.com/p/autoddvpn/">autoddvpn</a>项目以后，从之前使用<a href="http://www.dd-wrt.com/">dd-wrt</a>到现在用<a href="http://tomato.groov.pl/">Tomato</a>，都是把这套没人维护的代码不断的修修补补地放到路由上面用。虽然有一些其他搭梯子的方案，但是用OpenVPN加上自定义的routes，用起来感觉是最干净的，所有的用户都不需要在自己的电脑中设置，连接这个路由器的网络就可以自动爬梯了。</p>
+
+<p>不过随着最近GFW越来越强大，它的Advanced <a href="http://en.wikipedia.org/wiki/Deep_packet_inspection">DPI</a>对普通的OpenVPN连接会进行干扰，导致使用一段时间就断开，或者干脆就连不上。按照我一贯的作风（懒），装个<a href="https://www.stunnel.org/index.html">stunnel</a>以后，把OpenVPN以TCP模式通过stunnel连接也将就用着了。</p>
+
+<p>然后慢慢地发现，在吞吐量高的情况下，通过OpenVPN的所有流量，延迟都会变成非常高（4000ms+），要是看YouTube 1080p的话，别说开其他网页，能不buffering就不错了。OpenVPN用TCP的性能本来就没有UDP的好，加上一层stunnel，性能就更加不要提了。而且stunnel和OpenVPN全部都在路由器上面跑，除非你的是RT-AC68U、R7000这样的ARM路由，否则性能也就别想好到什么地方去了。</p>
+
+<p>也因为这个原因，每当打开Google+各种卡的时候，我都会很自然地打开Chrome寻找替代方案……直到最近，我遇见了<a href="http://www.tinc-vpn.org/">tinc</a>。</p>
+
+<p>其实之前也已经看到过关于tinc的一些介绍，但是总觉得挺麻烦的，许多东西都要自己手动去配置（其实还是懒……）。但是实在忍无可忍了，既然决定折腾，那么就动手吧~</p>
+
+<p>经过无数次trial and error，以及在网上参考了一些资料以及tinc的mail list以后，最终成功搭起来了！然后我把我用的脚本以及配置<a href="https://github.com/maddie/tinc-on-routers">上传到了GitHub</a>。</p>
+
+<!-- more -->
+
+<p>虽然tinc支持IPv4 and IPv6，但是由于IPv6现在还比较少用的，所以这里就只针对IPv4了。</p>
+
+<p>下面来简单说一下整个过程（以Tomato为例，其他平台配置应该也相似）：</p>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<ol>
+<li>首先你得有一个不在GFW里的服务器。我用的是<a href="http://www.linode.com/">Linode</a>东京的VPS，系统使用Arch Linux。最便宜的套餐$10一个月，一次性购买一年/两年有打折~ <a href="https://www.linode.com/?r=ab58c8f4cfc77ba527d444f0bab4e05c28561cea">购买链接</a></li>
+<li>你需要在路由上安装tinc。这意味着你需要现在路由上部署Optware/Entware。本文使用Entware为例。</li>
+<li>The ability to RTFM and follow instructions.</li>
+</ol>
+
+<h3 id="服务器端配置">服务器端配置</h3>
+
+<p><strong>i. Enable IPv4 Forwarding in sysctl.conf</strong></p>
+
+<p>首先，你必须把服务器的IPv4转发打开。在大多数Linux发行版中，这个选项默认是关闭的。</p>
+
+<pre><code># sysctl -w net.ipv4.ip_forward=1
+</code></pre>
+
+<p>在Arch Linux中，你需要在<code>/etc/sysctl.d/</code>中新建一个文件（例如<code>50-ip_forward.conf</code>）来让这个设置在启动时自动生效。</p>
+
+<p>在Debian/Ubuntu等系统中，你需要在<code>/etc/sysctl.conf</code>中添加<code>net.ipv4.ip_forward=1</code>来让这个设置在启动时自动生效。</p>
+
+<p>CentOS的话……请自行Google，真没什么使用经验。</p>
+
+<p><strong>ii. 安装tinc</strong></p>
+
+<p>我使用的是Arch Linux的community中的tinc，版本为1.0.24-2。AUR中有一个tinc-pre，版本为1.1pre10，这个版本不建议使用，它使用新的experimental协议，配置上会有出入，而且据闻性能没有原来的版本好。</p>
+
+<pre><code># pacman -S tinc
+</code></pre>
+
+<p>在Debian/Ubuntu中则是</p>
+
+<pre><code># apt-get install tinc
+</code></pre>
+
+<p><strong>iii. 配置tinc</strong></p>
+
+<blockquote>
+<p>Arch Linux:</p>
+</blockquote>
+
+<p>tinc在安装后不会自动在<code>/etc</code>目录下建立文件夹，我们要手动建立：</p>
+
+<pre><code># mkdir -p /etc/tinc/server/hosts
+</code></pre>
+
+<p>这里面的<code>server</code>是你的<code>NETNAME</code>，这个名字将用于后面启用服务时使用。
+<code>hosts</code>文件夹用于存放每个host的信息，后面会讲到。</p>
+
+<p>写入配置文件：</p>
+
+<p>(a) <code>tinc.conf</code>的内容</p>
+
+<pre><code># cd /etc/tinc/server
+# cat tinc.conf
+Name = server
+Interface = tinc0
+</code></pre>
+
+<p>当中<code>Name</code>的值<code>server</code>为本机（服务器端）的名称。记住你的名称，在后面还会用到。</p>
+
+<p>(b) <code>tinc-up</code>的内容</p>
+
+<pre><code># cat tinc-up
+#!/bin/sh
+ip link set $INTERFACE up
+ip addr add 192.168.4.1 dev $INTERFACE
+
+ip route add 192.168.4.254 dev $INTERFACE proto kernel scope link src 192.168.4.1
+
+iptables -A FORWARD -s 192.168.4.0/24 -j ACCEPT
+iptables -A FORWARD -d 192.168.4.0/24 -j ACCEPT
+iptables -A POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0
+</code></pre>
+
+<p>我使用的网段是192.168.4.0/24，你可以根据自己的需要对这个进行更改。记得把其他地方的subnet也改掉哦！最后的iptables规则中，第三条的eth0是你的VPS面向公网的网卡。</p>
+
+<p>&copy; <code>tinc-down</code>的内容</p>
+
+<pre><code># cat tinc-down
+#!/bin/sh
+ip link set $INTERFACE down
+
+iptables -D FORWARD -s 192.168.4.0/24 -j ACCEPT
+iptables -D FORWARD -d 192.168.4.0/24 -j ACCEPT
+iptables -D POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0
+</code></pre>
+
+<p>同样，根据需要修改subnet，必须与tinc-up中的保持一致。</p>
+
+<p>(d) <code>hosts/server</code>的内容</p>
+
+<p>在这里，<code>server</code>这个文件名必须对应前面在<code>tinc.conf</code>中设置的<code>Name</code>参数的值。tinc会根据<code>Name</code>去匹配<code>hosts</code>目录下的配置文件。</p>
+
+<pre><code># cat hosts/server
+Address = YOUR.IP.ADDRESS (你的公网地址)
+Port = 655
+Subnet = 0.0.0.0/0
+</code></pre>
+
+<p>需要填写的配置文件只有这四个。完成以后，生成private key：</p>
+
+<pre><code># tincd -n server -K4096
+Generating 4096 bits keys:
+.................................................................................................................................................................................................++ p
+..................................++ q
+Done.
+Please enter a file to save private RSA key to [/etc/tinc/server/rsa_key.priv]: (私钥)
+Please enter a file to save public RSA key to [/etc/tinc/server/hosts/server]: (公钥)
+</code></pre>
+
+<p>这样会生成一个4096 bit的私钥，生成的密钥保存在默认路径即可。<code>-n</code>参数后面的<code>server</code>为你的<code>NETNAME</code>，即<code>/etc/tinc/server</code>中<code>server</code>部分。</p>
+
+<blockquote>
+<p>Debian/Ubuntu</p>
+</blockquote>
+
+<p>配置的过程基本相同，但是因为手上没有Debian/Ubuntu的机器，也懒得整VM，所以不能保证正确性。</p>
+
+<p>根据Ubuntu的manpage，Debian/Ubuntu上的tinc所使用的config结构与Arch Linux不同：<code>tincd</code>将直接读取<code>/etc/tinc</code>中的内容，无需指定<code>NETNAME</code>。即：</p>
+
+<pre><code># mkdir -p /etc/tinc/hosts
+
+# cd /etc/tinc
+# cat tinc.conf
+Name = server
+Interface = tinc0
+
+# cat tinc-up
+#!/bin/sh
+ip link set $INTERFACE up
+ip addr add 192.168.4.1 dev $INTERFACE
+
+ip route add 192.168.4.254 dev $INTERFACE proto kernel scope link src 192.168.4.1
+
+iptables -A FORWARD -s 192.168.4.0/24 -j ACCEPT
+iptables -A FORWARD -d 192.168.4.0/24 -j ACCEPT
+iptables -A POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0
+
+# cat tinc-down
+#!/bin/sh
+ip link set $INTERFACE down
+
+iptables -D FORWARD -s 192.168.4.0/24 -j ACCEPT
+iptables -D FORWARD -d 192.168.4.0/24 -j ACCEPT
+iptables -D POSTROUTING -t nat -s 192.168.4.0/24 -j MASQUERADE -o eth0
+
+# cat hosts/server
+Address = YOUR.IP.ADDRESS (你的公网地址)
+Port = 655
+Subnet = 0.0.0.0/0
+
+# tincd -K4096   （注意此处不带-n参数）
+Generating 4096 bits keys:
+.................................................................................................................................................................................................++ p
+..................................++ q
+Done.
+Please enter a file to save private RSA key to [/etc/tinc/rsa_key.priv]:
+Please enter a file to save public RSA key to [/etc/tinc/hosts/server]:
+</code></pre>
+
+<p>服务器端的配置暂时告一段落。</p>
+
+<h3 id="客户端-路由器-配置">客户端（路由器）配置</h3>
+
+<p>这里我仅以Tomato + <a href="https://github.com/Entware/entware">Entware</a>为例。使用其他平台的配置应该大同小异，请自行摸索。</p>
+
+<p>路由器默认你已刷Tomato固件，并且配置Entware环境。具体操作不在此介绍，请自行Google。</p>
+
+<p>文中Entware安装路径为默认的<code>/opt</code>。</p>
+
+<p><strong>i. 安装tinc</strong></p>
+
+<p>使用Entware的<code>opkg</code>工具安装<code>tinc</code>以及<code>git</code>：</p>
+
+<pre><code># opkg install tinc
+# opkg install git
+</code></pre>
+
+<p>完成安装后，<code>git</code>可能需要进行额外配置，步骤不在此细述。</p>
+
+<p><strong>ii. 配置tinc</strong></p>
+
+<p>安装完成后，从GitHub上将脚本clone下来：</p>
+
+<pre><code># git clone https://github.com/maddie/tinc-on-routers.git /opt/etc/tinc
+</code></pre>
+
+<p>执行配置脚本<code>setup.sh</code>（随手写的，有bug请大喊）</p>
+
+<pre><code># cd /opt/etc/tinc
+# ./setup.sh
+
+Enter your router name [client]: (输入这个节点的名称，默认client)
+No input. Defaulting to 'client'.
+
+Enter your server name [server]: (输入需要服务器的名称，请参考服务器端tinc.conf中Name参数的值)
+No input. Defaulting to 'server'.
+
+Enter your local address [192.168.4.2]: (这个节点的IP地址，必须在服务器配置的Subnet中，且唯一)
+No input. Defaulting to '192.168.4.2'.
+
+Enter remote subnet [192.168.4.0/24]: (远端配置的subnet，上面local address应在这个子网范围中)
+No input. Defaulting to '192.168.4.0/24'.
+
+Log file [/opt/var/log/tincd.log]: (Log文件路径，通常默认即可)
+No input. Defaulting to '/opt/var/log/tincd.log'.
+
+tinc config path [/opt/etc/tinc]: (客户端的tinc配置文件路径，通常默认即可)
+No input. Defaulting to '/opt/etc/tinc'.
+
+Your LAN Subnet [192.168.1.0/24]: (你的LAN所在Subnet，用于设置iptables规则)
+No input. Defaulting to '192.168.1.0/24'.
+
+Configuration summary: (这里会显示你输入的信息)
+Local name: client
+Remote name: server
+Local address: 192.168.4.2
+Log file: /opt/var/log/tincd.log
+Config path: /opt/etc/tinc
+LAN Subnet: 192.168.1.0/24
+
+(确认无误后，按任意键继续。否则按Ctrl+C终止配置脚本。)
+Press any key to continue, otherwise hit Ctrl+C to abort.
+
+Applying configurations...
+
+(生成密钥)
+Generating private key for this client...
+This may take a few minutes on a router.
+Please wait patiently. :)
+
+Generating 4096 bits keys:
+.................................................................................................................................................................................................++ p
+..................................++ q
+Done.
+Please enter a file to save private RSA key to [/opt/etc/tinc/rsa_key.priv]:
+Please enter a file to save public RSA key to [/opt/etc/tinc/hosts/client]:
+
+Done.
+
+Please add these lines to your WAN Up script:
+
+&gt; sleep 15
+&gt; modprobe tun &amp;&amp; tincd
+</code></pre>
+
+<p>客户端的配置暂告一段落。</p>
+
+<h3 id="交换公钥">交换公钥</h3>
+
+<p>完成两边的配置以后，需要把生成的公钥放到另外的节点上。如果你是一直按照本文的设置进行的话，那么：</p>
+
+<p>服务器端公钥位于：</p>
+
+<blockquote>
+<p>Arch Linux</p>
+</blockquote>
+
+<pre><code>/etc/tinc/server/hosts/server
+</code></pre>
+
+<blockquote>
+<p>Debian/Ubuntu</p>
+</blockquote>
+
+<pre><code>/etc/tinc/hosts/server
+</code></pre>
+
+<p>客户端公钥位于：</p>
+
+<pre><code>/opt/etc/tinc/hosts/client
+</code></pre>
+
+<p>tinc的公钥，当中实际上还包括对应节点的连接信息。例如，在<code>/etc/tinc/server/hosts/server</code>中：</p>
+
+<pre><code>Address = YOUR.IP.ADDRESS
+Port = 655
+Subnet = 0.0.0.0/0
+</code></pre>
+
+<p>这代表<code>tincd</code>将会在<code>YOUR.IP.ADDRESS</code>的<code>655</code>端口上监听，允许来自<code>0.0.0.0/0</code>子网的用户。</p>
+
+<p>在<code>/etc/tinc/hosts/client</code>中：</p>
+
+<pre><code>Subnet = 192.168.4.2
+</code></pre>
+
+<p>则表示该节点被分配到的子网为<code>192.168.4.2/32</code>。从这里其实可以看出，tinc支持将一个Subnet分配给一个节点，让该节点通过DHCP或者static routing的方式来对整个VPN进行访问。但是我们只是用于简单的routing作gateway，因此分配一个地址就足够了。</p>
+
+<p>那么，交换公钥这个动作就如字面所说的一样了。将服务器端的<code>/etc/tinc/server/hosts/server</code>放到客户端（路由器）的<code>/opt/etc/tinc/hosts</code>下；再将客户端的<code>/opt/etc/tinc/hosts/client</code>放到服务器端的<code>/etc/tinc/server/hosts</code>下。</p>
+
+<p>这样，两边通过读取<code>tinc.conf</code>中的<code>Name</code>来决定自己的身份，客户端通过其中的<code>ConnectTo</code>参数来决定连接的节点，然后再通过<code>hosts</code>中的公钥和各自的私钥来进行身份的验证，最后建立连接。</p>
+
+<h3 id="tinc服务自启动">tinc服务自启动</h3>
+
+<p>其实都比较简单：</p>
+
+<p>服务器端：</p>
+
+<blockquote>
+<p>Arch Linux</p>
+</blockquote>
+
+<pre><code># systemctl enable tincd@server
+# systemctl start tincd@server
+</code></pre>
+
+<p>注意<code>@</code>后面的<code>server</code>是你的<code>NETNAME</code>，即<code>/etc/tinc/server</code>中<code>server</code>部分。</p>
+
+<blockquote>
+<p>Debian/Ubuntu</p>
+</blockquote>
+
+<pre><code># update-rc.d -f tincd defaults
+# service tincd restart
+</code></pre>
+
+<p>客户端（路由器）：</p>
+
+<p>Tomato的网页GUI中，找到Administration -&gt; Scripts -&gt; WAN Up，填入：</p>
+
+<pre><code>sleep 15
+modprobe tun &amp;&amp; tincd
+</code></pre>
+
+<p>大功告成！</p>
+
+<p>PS: GitHub上我放的脚本其实跟autoddvpn的非常相似，基本上只是把OpenVPN换成了tinc而已。在GitHub的README中，我会简单说明里面各个文件的用途。另外，如果你需要配置多于一个客户端，你只需要把客户端的Subnet地址（即上文中的192.168.4.2）换一下，重新生成private key，和服务器端再交换一下公钥就可以了。</p>
+
+<p>如果文中有哪里措辞不当或者有误，欢迎指正！谢谢！</p>
+
+<p>Any comments or questions, please post here or email me: maddie at emzee dot be</p>
+
+<p>You can also open issues on GitHub.</p>
+
+<hr />
+
+<p>小插曲：</p>
+
+<p>把这篇文章从Ghost移过来GitHub Pages以后，发现这个文章总是进不来，而且只要我点过这个文章的链接，整个网络都没办法再访问GitHub Pages了。后来把permalink改成URL里面那个，居然就可以了。。狗日的Games for Windows :)</p>
+
+<hr />
+
+<p>Edit on 2019-10-16T14:52:34+08:00 -&gt;</p>
+
+<p>这个教程里面的内容很多都已经过时了，当然还是可以照着用，不过有更好的方案可以选择。tinc到目前为止作为VPN来说还是比较稳定的，目前在路由器上面的transparent proxy比较推荐的方案就是SS或者tinc了。</p>
+
+  </div>
+  
+  <div class="pagination">
+    <div class="pagination__title">
+      <span
+        class="pagination__title-h">Read other posts</span>
+      <hr />
+    </div>
+    <div class="pagination__buttons">
+      
+      <span class="button previous">
+        <a href="http://blog.emzee.be/posts/golang-mailslot-via-syscall/">
+          <span class="button__icon">←</span>
+          <span class="button__text">Sending message to Windows Mailslot with Go // 使用Go语言向Windows Mailslot邮槽发送消息</span>
+        </a>
+      </span>
+      
+      
+    </div>
+  </div>
+  
+
+  
+
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2019 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="http://blog.emzee.be/assets/main.js"></script>
+<script src="http://blog.emzee.be/assets/prism.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
